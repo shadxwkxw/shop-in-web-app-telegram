@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/addtocart.js"></script>
+    <script src="js/removefromcart.js"></script>
+    <script src="js/updatecart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="fonts/bahnshrift/Bahnschrift.ttf">
+</head>
+<body>
+    <div class="header">
+        <h2>Товары</h2>
+        <div class="cart-icon" id="cartIcon">
+            <img src="images/pngwing.png" alt="Корзина" />
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="products">
+            <template id="productTemplate">
+                <div class="product">
+                    <img src="" alt="" class="product-image">
+                    <div class="product-info">
+                        <p class="product-name"></p>
+                        <p class="product-price"></p>
+                        <div class="quantity-controls">
+                            <button class="remove-button" disabled>-</button>
+                            <p class="product-quantity"><span class="quantity">0</span></p>
+                            <button class="add-button">+</button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <div class="cart-popup" id="cartPopup" style="display: none;">
+                <h2>Корзина</h2>
+                <span class="close-icon" id="closeCart">&times;</span>
+                <div class="cart-items"></div>
+                <p class="total-price">Товары не добавлены</p>
+                <div class="button-container">
+                    <!-- <button class="button" id="clear-cart">Очистить</button>  Кнопка "Очистить" -->
+                    <button class="button" id="pay-button" disabled>Оплатить</button>
+                </div>
+            </div>
+
+            <div id="modal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <img src="" alt="" class="modal-image">
+                    <h2 class="modal-title"></h2>
+                    <p class="modal-description"></p>
+                </div>
+            </div>
+
+            <script>
+                const productTemplate = document.getElementById('productTemplate').content;
+                const products = document.querySelector('.products');
+                const cartIcon = document.getElementById('cartIcon');
+                const cartPopup = document.getElementById('cartPopup');
+                const closeCartButton = document.getElementById('closeCart');
+                // const clearCartButton = document.getElementById('clear-cart');
+                const cartItemsContainer = document.querySelector('.cart-items');
+                
+                // Массивы с названиями
+                const productNames = [
+                    'Myatnaya ittumatsia',
+                    'Yagodnyi gang-bang',
+                    'Energichnyi sving',
+                    'Klubnichnyi minet',
+                    'Apelsinovyi dozhd',
+                    'Tropicheskiy skvirt',
+                    'Kislo-sladkiy felching',
+                    'Ananasovyi kamshot',
+                    'Ezhevichnyi BDSM',
+                    'Случайный вкус'
+                ];
+                
+                const productImages = [
+                    'https://optim.tildacdn.com/tild3335-3365-4539-b565-393736626130/-/cover/564x564/center/center/-/format/webp/Group_1321316499.png',
+                    'https://optim.tildacdn.com/tild3363-6363-4238-b166-333938646139/-/cover/564x564/center/center/-/format/webp/Group_1321316492.png',
+                    'https://optim.tildacdn.com/tild3030-3637-4236-b062-386137343164/-/cover/746x740/center/center/-/format/webp/Group_1321316458.png',
+                    'https://optim.tildacdn.com/tild3435-3039-4432-b963-353664396233/-/cover/564x564/center/center/-/format/webp/Group_1321316501.png',
+                    'https://optim.tildacdn.com/tild3237-6566-4038-b034-303634356364/-/cover/564x564/center/center/-/format/webp/Group_1321316493.png',
+                    'https://optim.tildacdn.com/tild6630-3130-4231-b733-653238643538/-/cover/564x564/center/center/-/format/webp/Group_1321316495.png',
+                    'https://optim.tildacdn.com/tild3933-6662-4863-a637-366637633037/-/cover/746x740/center/center/-/format/webp/Group_1321316487.png',
+                    'https://optim.tildacdn.com/tild3635-3036-4863-b364-666631333534/-/cover/564x564/center/center/-/format/webp/Group_1321316491.png',
+                    'https://optim.tildacdn.com/tild3262-6263-4364-b233-313662346432/-/cover/564x564/center/center/-/format/webp/Group_1321316490.png',
+                    'https://www.pngall.com/wp-content/uploads/2/Question-Mark-PNG.png'
+                ];
+            
+                const productPrice = '450 рублей';
+                
+                const productQuantities = [2, 3, 1, 5, 4, 2, 6, 3, 1]; // Максимальное количество для каждого товара
+                
+                for (let i = 0; i < productNames.length; i++) {
+                    const product = productTemplate.cloneNode(true);
+
+                    product.querySelector('.product-image').src = productImages[i]; // Уникальное изображение
+                    product.querySelector('.product-name').textContent = productNames[i]; // Уникальное название
+                    product.querySelector('.product-price').textContent = productPrice; // Общая цена
+
+                    products.appendChild(product);
+                }
+
+                // Открытие и закрытие корзины
+                cartIcon.addEventListener('click', () => {
+                    cartPopup.classList.remove('cart-popup-leave');
+                    cartPopup.classList.add('cart-popup-enter');
+                    cartPopup.style.display = 'block';
+                });
+
+                closeCartButton.addEventListener('click', () => {
+                    cartPopup.classList.remove('cart-popup-enter');
+                    cartPopup.classList.add('cart-popup-leave');
+                    setTimeout(() => {
+                        cartPopup.style.display = 'none';
+                    }, 500);
+                });
+                
+                // clearCartButton.addEventListener('click', () => {
+                //     cartItemsContainer.innerHTML = ''; // Очищаем содержимое корзины
+                //     document.querySelector('.total-price').textContent = 'Товары не добавлены'; // Обновляем текст
+                //     const quantities = document.querySelectorAll('.quantity');
+                //     quantities.forEach(quantity => {
+                //         quantity.textContent = '0';
+                //     })
+                // });
+                
+                const tg = window.Telegram.WebApp;
+                const productsContainer = document.querySelector('.products');
+                const totalPriceElement = document.querySelector('.total-price');
+                const payButton = document.getElementById('pay-button');
+
+                let cart = {};
+                let totalPrice = 0;
+                
+                // Добавление обработчиков событий к кнопкам "Добавить в корзину" и "Убрать из корзины"
+                const productItems = document.querySelectorAll('.product');
+                productItems.forEach(product => {
+                    const addButton = product.querySelector('.add-button');
+                    const removeButton = product.querySelector('.remove-button');
+
+                    addButton.addEventListener('click', () => {
+                        addToCart(product);
+                        removeButton.disabled = false; // Активируем кнопку "Убрать из корзины"
+                        });
+
+                    removeButton.addEventListener('click', () => {
+                        removeFromCart(product);
+                        if (!cart[product.querySelector('.product-name').textContent]) {
+                            removeButton.disabled = true; // Деактивируем кнопку, если товар убран
+                        }
+                    });
+                });
+
+                // Обработчик события "Оплатить"
+                payButton.addEventListener('click', () => {
+                    // Отправка запроса на оплату в Telegram Bot
+                    tg.sendData("pay");
+                });
+            </script>
+        </div>
+    </div>
+    
+    <script>
+   
+    </script>
+</body>
+</html>
