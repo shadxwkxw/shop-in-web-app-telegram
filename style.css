@@ -28,21 +28,21 @@ body {
 
 .products {
     display: flex;
-    flex-wrap: wrap; /* Позволяет элементам переноситься на следующую строку */
-    gap: 20px; /* Расстояние между товарами */
+    flex-wrap: wrap; 
+    gap: 20px;
 }
 
 .product {
-    flex: 1 1 calc(50% - 20px); /* Задает ширину каждого товара как 50% минус отступы */
-    box-shadow: 0 2px 25px rgba(0, 0, 0, 0.1); /* Добавляем тень для лучшего визуального восприятия */
-    padding: 10px; /* Отступы внутри блока товара */
-    border-radius: 10px; /* Закругление углов */
-    background: #fff; /* Фон товара */
+    flex: 1 1 calc(50% - 20px);
+    box-shadow: 0 2px 25px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+    background: #fff;
 }
 
 .product-image {
-    width: 100%; /* Ширина изображения на 100% */
-    height: auto; /* Автоматическая высота для сохранения пропорций */
+    width: 100%;
+    height: auto;
     border-radius: 10px;
 }
 
@@ -85,9 +85,9 @@ body {
 }
 
 .cart-items {
-    max-height: 240px; /* Установите желаемую высоту */
-    overflow-y: auto; /* Включите вертикальный скроллинг */
-    margin-bottom: 20px; /* Отступ снизу для кнопок */    
+    max-height: 240px;
+    overflow-y: auto;
+    margin-bottom: 20px;   
 }
 
 .cart-item-info {
@@ -127,8 +127,8 @@ body {
 
 .button-container {
     display: flex;
-    justify-content: space-between; /* Размещает кнопки по краям */
-    margin-top: 20px; /* Добавляет отступ сверху для отделения от текста */
+    justify-content: space-between;
+    margin-top: 20px;
 }
 
 .button {
@@ -146,19 +146,19 @@ body {
 
 .add-button,
 .remove-button {
-    font-size: 20px; /* Размер шрифта для кнопок */
-    padding: 7px 12px;  /* Отступы для кнопок */
-    cursor: pointer; /* Указатель при наведении */
-    border: none; /* Убираем стандартную рамку */
-    border-radius: 15px; /* Скругленные края */
-    background-color: #4CAF50; /* Цвет фона кнопки */
-    color: white; /* Цвет текста */
-    transition: background-color 0.3s; /* Плавный переход цвета фона */
+    font-size: 20px;
+    padding: 7px 12px; 
+    cursor: pointer;
+    border: none;
+    border-radius: 15px;
+    background-color: #4CAF50;
+    color: white;
+    transition: background-color 0.3s;
 }
 
 .add-button:hover,
 .remove-button:hover {
-    background-color: #45a049; /* Цвет фона при наведении */
+    background-color: #45a049;
 }
 
 .quantity-controls {
@@ -167,8 +167,8 @@ body {
 }
 
 .product-quantity {
-    margin: 0 10px; /* Отступы вокруг количества */
-    font-size: 18px; /* Размер шрифта для количества */
+    margin: 0 10px;
+    font-size: 18px;
     display: flex;
     align-items: center;
 }
@@ -192,9 +192,8 @@ body {
 
 .cart-popup {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 30%;
+    left: 38px;
     background-color: white;
     border: 1px solid #ccc;
     padding: 20px;
@@ -206,10 +205,10 @@ body {
 
 .close-icon {
     position: absolute;
-    top: 10px; /* Отступ сверху */
-    right: 10px; /* Отступ справа */
-    font-size: 40px; /* Размер шрифта */
-    cursor: pointer; /* Указатель при наведении */
+    top: 10px;
+    right: 10px;
+    font-size: 40px; 
+    cursor: pointer;
 }
 
 .cart-popup h2 {
@@ -248,6 +247,9 @@ body {
     }
 }
 .modal {
+    display: none;
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
     position: fixed;
     z-index: 1;
     left: 0;
@@ -256,18 +258,30 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+} 
 
 .modal-image {
     width: 100%;
+    border-radius: 20px;
 }
 
 .modal-content {
     background-color: #fff;
-    margin: 15% auto;
+    margin: auto;
     padding: 20px;
+    padding-top: 8px;
     border: 1px solid #888;
-    width: 80%;
+    border-radius: 15px;
+    width: auto;
+    max-width: 80%;
+    word-wrap: break-word;
 }
 
 .close-button {
@@ -282,4 +296,15 @@ body {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.modal-description {
+    font-weight: 400;
+    padding-top: 5px;
+}
+
+.modal-title {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
 }
