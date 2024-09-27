@@ -109,8 +109,6 @@
             
                 const productPrice = '450 рублей';
                 
-                const productQuantities = [2, 3, 1, 5, 4, 2, 6, 3, 1]; // Максимальное количество для каждого товара
-                
                 for (let i = 0; i < productNames.length; i++) {
                     const product = productTemplate.cloneNode(true);
 
@@ -154,25 +152,51 @@
                 const totalPriceElement = document.querySelector('.total-price');
                 const payButton = document.getElementById('pay-button');
 
-                let cart = {};
                 let totalPrice = 0;
-                
+
                 // Добавление обработчиков событий к кнопкам "Добавить в корзину" и "Убрать из корзины"
                 const productItems = document.querySelectorAll('.product');
-                productItems.forEach(product => {
+                productItems.forEach((product, index) => {
                     const addButton = product.querySelector('.add-button');
                     const removeButton = product.querySelector('.remove-button');
+                    const quantityDisplay = product.querySelector('.product-quantity .quantity');
+
+                    // Максимальное количество для каждого товара
+                    const maxQuantity = productQuantities[index];
 
                     addButton.addEventListener('click', () => {
-                        addToCart(product);
-                        removeButton.disabled = false; // Активируем кнопку "Убрать из корзины"
-                        });
+                        const productName = product.querySelector('.product-name').textContent;
+
+                        // Проверка текущего количества товара в корзине
+                        const currentQuantity = cart[productName] ? cart[productName].quantity : 0;
+
+                        // Если текущее количество меньше максимального
+                        if (currentQuantity < maxQuantity) {
+                            addToCart(product);
+                            quantityDisplay.textContent = cart[productName].quantity; // Обновляем отображение количества
+                            
+                            if (cart[productName].quantity === maxQuantity) { // Если достигли лимита в списке
+                                addButton.disabled = true; // Деактивируем кнопку
+                                addButton.style.backgroundColor = 'gray'; // Перекрашиваем в серый цвет при деактивации
+                            }
+                            removeButton.disabled = false; // Активируем кнопку "Убрать из корзины"
+                        }
+                        updateCart(); // Обновляем отображение корзины
+                    });
 
                     removeButton.addEventListener('click', () => {
+                        const productName = product.querySelector('.product-name').textContent;
                         removeFromCart(product);
-                        if (!cart[product.querySelector('.product-name').textContent]) {
+                        cart[productName]--; // Уменьшаем количество в корзине
+                        quantityDisplay.textContent = cart[productName]; // Обновляем отображение количества
+                    
+                        if (cart[productName] <= 0) { // Если количество товара достигло нуля
+                            delete cart[productName]; // Удаляем товар из корзины
                             removeButton.disabled = true; // Деактивируем кнопку, если товар убран
                         }
+                        
+                        addButton.disabled = false; // Активируем кнопку "Добавить в корзину"
+                        addButton.style.backgroundColor = ''; // Возвращаем цвет кнопки к исходному
                     });
                 });
 

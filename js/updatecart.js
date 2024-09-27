@@ -1,11 +1,14 @@
+let cart = {};
+const productQuantities = [2, 3, 1, 5, 4, 2, 6, 3, 1, 10]; // Максимальное количество для каждого товара
+
 // Функция обновления корзины
 function updateCart() {
     cartItemsContainer.innerHTML = '';
-    totalPrice = 0;
+    let totalPrice = 0;
 
     for (const productName in cart) {
         const product = cart[productName];
-        const itemPrice = product.price * product.quantity;
+        const itemPrice = product.price * product.quantity; 
         totalPrice += itemPrice;
 
         const cartItem = document.createElement('div');
@@ -19,7 +22,7 @@ function updateCart() {
                 </div>
             </div>
             <p class="cart-item-quantity">Кол-во: ${product.quantity}</p>
-        `;
+        ;`
         cartItemsContainer.appendChild(cartItem);
     }
 
@@ -27,7 +30,6 @@ function updateCart() {
     if (totalPrice === 0) {
         totalPriceElement.textContent = 'Товары не добавлены';
     } else {
-        totalPriceElement.textContent = `Общая стоимость: ${totalPrice} рублей`;
+        totalPriceElement.textContent = `Общая стоимость: ${totalPrice} рублей;`
     }
-    
 }
